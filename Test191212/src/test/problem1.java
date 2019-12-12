@@ -14,14 +14,13 @@ public class problem1 {
 		int[] num=null;
 		num = new int[3];
 		Scanner scan = new Scanner(System.in);
-		System.out.println("3개의 숫자를 입력하세요 : ");
 		for(int i=0; i<num.length; i++) {
-		num[i]=scan.nextInt();
+			System.out.print((i+1)+"번 째 숫자 입력 : ");
+		    num[i]=scan.nextInt();
 			sum += num[i];
 		}System.out.println("총합 : "+sum);
 		System.out.println("평균 : "+sum/num.length);
 		
-
 	}
 
 }
