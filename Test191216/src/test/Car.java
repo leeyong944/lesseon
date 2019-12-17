@@ -47,6 +47,8 @@ public class Car {
 		this.color = color;
 		this.company = company;
 	}
+	
+	//마우스 우클릭 > source > to String()
 
 	@Override
 	public String toString() {
