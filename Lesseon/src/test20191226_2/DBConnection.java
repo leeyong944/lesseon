@@ -3,7 +3,7 @@ package test20191226_2;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
+//a
 public class DBConnection {
 	//static 메소드
 	public static Connection makeConnection() {

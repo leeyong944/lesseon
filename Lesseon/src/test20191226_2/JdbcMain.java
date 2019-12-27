@@ -1,5 +1,5 @@
 package test20191226_2;
-
+//a
 import java.util.*;
 
 public class JdbcMain {
@@ -107,6 +107,7 @@ public class JdbcMain {
 			index++;
 		}
 			//DB에서 조회한 전체 학생 목록을 여기 위치에서 출력
+		
 	}
 
 }
