@@ -233,4 +233,16 @@ public class DBsql {
 		
 	}
 	
+	public void deleteDB(int studentNo) {
+		String sql = "DELETE STUDENT WHERE STUDENTNO = ?";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, studentNo);
+			pstmt.executeUpdate();
+			System.out.println("삭제 성공");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

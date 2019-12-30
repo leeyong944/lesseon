@@ -27,7 +27,7 @@ public class JdbcMain {
 		boolean run = true;
 		while(run) {
 			System.out.println("0.DB 접속, 1.전체 조회, 2. 데이터 추가, 3.데이터 추가(? 사용), 4.데이터 추가(입력), 5.전체 조회(ArrayList)"
-					 		   +", 6.조건 검색, 7.수정,  8.종료");
+					 		   +", 6.조건 검색, 7.수정, 8.삭제, 9.종료");
 			selectNum = scan.nextInt();
 			switch(selectNum) {
 			case 0 :
@@ -96,6 +96,11 @@ public class JdbcMain {
 				sql.updateDB(phone1, studentNo1);
 				break;
 			case 8 :
+				System.out.print("삭제할 학생 번호를 입력하세요 : ");
+				int studentNo2 = scan.nextInt();
+				sql.deleteDB(studentNo2);
+				break;
+			case 9 :
 				run = false;				
 				break;
 				
@@ -107,7 +112,7 @@ public class JdbcMain {
 			index++;
 		}
 			//DB에서 조회한 전체 학생 목록을 여기 위치에서 출력
-		
+		                               
 	}
 
 }
