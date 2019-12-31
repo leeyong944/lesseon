@@ -14,8 +14,9 @@ public class DBsql {
 	
 	public void insertDB(NaverMember nm) {
 		String sql = "INSERT INTO MEMBER VALUES(?,?,?,?,?,?,?,?)";
+		//String sql = "INSERT INTO MEMBER VALUES(?,?,?,TO_DATE(?,'DD/MM/YYYY'),?,?,SYSDATE)";
 		java.util.Date utilDate = new java.util.Date();
-		java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+		java.sql.Date date = new java.sql.Date(utilDate.getTime());
 		try {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, nm.getId());
@@ -25,7 +26,7 @@ public class DBsql {
 			pstmt.setString(5, nm.getGender());
 			pstmt.setString(6, nm.getMail());
 			pstmt.setString(7, nm.getPhone());
-			pstmt.setDate(8, sqlDate);
+			pstmt.setTimestamp(8, new java.sql.Timestamp(date.getTime()));
 			pstmt.executeUpdate();
 			System.out.println("가입완료");
 		} catch (SQLException e) {
@@ -72,10 +73,9 @@ public class DBsql {
 	
 
 	public void selectMember(String id, String password) {
-		String sql = "SELECT PASSWORD FROM MEMBER WHERE ID = ?";
+		String sql = "SELECT PASSWORD FROM MEMBER WHERE ID = 'admin'";
 		try {
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				String naverPassword = rs.getString("password");
@@ -98,7 +98,9 @@ public class DBsql {
 					System.out.println("관리자 아이디가 아닙니다.");
 				}
 				
-			}	
+			}else {
+				System.out.println("관리자 아이디가 아닙니다.");
+			}
 			
 		} catch (SQLException e1) {
 			e1.printStackTrace();
