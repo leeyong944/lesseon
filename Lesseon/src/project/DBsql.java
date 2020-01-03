@@ -29,7 +29,7 @@ public class DBsql {
 		}
 		
 		}
-	
+	a
 	public boolean check(String id, String password) {
 		boolean check = false;
 		String sql = "SELECT * FROM MENTALTEST WHERE ID = ? AND PASSWORD = ?";
