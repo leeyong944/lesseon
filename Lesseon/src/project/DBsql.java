@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.Scanner;
 
 public class DBsql {
-	
+	int totalScore;
 	Connection con = null;
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
@@ -29,7 +29,7 @@ public class DBsql {
 		}
 		
 		}
-	a
+
 	public boolean check(String id, String password) {
 		boolean check = false;
 		String sql = "SELECT * FROM MENTALTEST WHERE ID = ? AND PASSWORD = ?";
@@ -77,48 +77,230 @@ public class DBsql {
 		}
 	}
 	
-	public void DTest(String id, String password, int score, int selectNum) {
-		String sql = "SELECT Dscore FROM MENTALTEST WHERE PASSWORD = ? ";
-		Scanner scan = new Scanner(System.in);
+	public void adminDB(String id, String password) {
+		String sql = "SELECT PASSWORD FROM MENTALTEST WHERE ID = 'admin'";
 		try {
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, password);
+			rs = pstmt.executeQuery();			
+			if(rs.next()) {
+				if(password.equals(rs.getString("PASSWORD"))){
+				System.out.println("관리자로 로그인 되었습니다");
+				String sql2 = "SELECT * FROM MENTALTEST";
+				pstmt = con.prepareStatement(sql2);
+				rs = pstmt.executeQuery();
+				while(rs.next()) {
+					System.out.println("");
+					System.out.print("아이디 : "+rs.getString("ID")+", ");
+					System.out.print("비밀번호 : "+rs.getString("PASSWORD")+", ");
+					System.out.print("이름 : "+rs.getString("NAME")+", ");
+					System.out.print("전화번호 : "+rs.getString("TEL")+", ");
+					System.out.print("잔액 : "+rs.getString("BALANCE")+", ");
+					System.out.print("DSCORE : "+rs.getString("DSCORE")+", ");
+					System.out.print("SSCORE : "+rs.getString("SSCORE")+", ");
+					System.out.print("AASCORE : "+rs.getString("AASCORE")+", ");
+					System.out.print("IASCORE : "+rs.getString("IASCORE")+", ");
+					System.out.println("");	
+			}}} else {
+				System.out.println("입력하신 정보가 일치하지 않습니다.");
+			}
+			} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+	}
+	
+	public int DTest(String id) {
+		Scanner scan = new Scanner(System.in);
+		System.out.println("우울증 테스트 화면 입니다.");
+		System.out.println("문제를 보고 자신이 해당하는 사항을 선택해주세요.");
+		System.out.println("--------------------------------------------------");
+		System.out.println("문제 1 : 나는 기운이 없고 우울하다.");
+		System.out.println("1. 그렇지 않다   2. 가끔 그렇다   3. 자주 그렇다   4. 항상 그렇다");
+		System.out.print("선택 > ");
+		int selectNum = scan.nextInt();
+		this.totalScore = this.totalScore+selectNum;
+		System.out.println("문제 2 : 나는 쓸모가 없고 필요없는 사람이라고 느낀다.");
+		System.out.println("1. 그렇지 않다   2. 가끔 그렇다   3. 자주 그렇다   4. 항상 그렇다");
+		System.out.print("선택 > ");
+		selectNum = scan.nextInt();
+		this.totalScore = this.totalScore+selectNum;
+		System.out.println("문제 3 : 나는 눈물을 쏟거나 울고 싶어진다.");
+		System.out.println("1. 그렇지 않다   2. 가끔 그렇다   3. 자주 그렇다   4. 항상 그렇다");
+		System.out.print("선택 > ");
+		selectNum = scan.nextInt();
+		this.totalScore = this.totalScore+selectNum;
+		System.out.println("문제 4 : 나는 밤에 잠을 잘 못잔다.");
+		System.out.println("1. 그렇지 않다   2. 가끔 그렇다   3. 자주 그렇다   4. 항상 그렇다");
+		System.out.print("선택 > ");
+		selectNum = scan.nextInt();
+		this.totalScore = this.totalScore+selectNum;
+		System.out.println("문제 5 : 나는 별다른 이유 없이 피곤해진다.");
+		System.out.println("1. 그렇지 않다   2. 가끔 그렇다   3. 자주 그렇다   4. 항상 그렇다");
+		System.out.print("선택 > ");
+		selectNum = scan.nextInt();
+		this.totalScore = this.totalScore+selectNum;
+		System.out.println("문제 6 : 나는 안절부절 못해서 진정할 수가 없다.");
+		System.out.println("1. 그렇지 않다   2. 가끔 그렇다   3. 자주 그렇다   4. 항상 그렇다");
+		System.out.print("선택 > ");
+		selectNum = scan.nextInt();
+		this.totalScore = this.totalScore+selectNum;
+		System.out.println("문제 7 : 심장이 전보다 빨리 뛴다.");
+		System.out.println("1. 그렇지 않다   2. 가끔 그렇다   3. 자주 그렇다   4. 항상 그렇다");
+		System.out.print("선택 > ");
+		selectNum = scan.nextInt();
+		this.totalScore = this.totalScore+selectNum;
+		System.out.println("문제 8 : 나는 평소보다 신경이 더 날카롭다.");
+		System.out.println("1. 그렇지 않다   2. 가끔 그렇다   3. 자주 그렇다   4. 항상 그렇다");
+		System.out.print("선택 > ");
+		selectNum = scan.nextInt();
+		this.totalScore = this.totalScore+selectNum;
+		System.out.println("문제 9 : 내가 죽어야 남들이 더 잘 될 것이다.");
+		System.out.println("1. 그렇지 않다   2. 가끔 그렇다   3. 자주 그렇다   4. 항상 그렇다");
+		System.out.print("선택 > ");
+		selectNum = scan.nextInt();
+		this.totalScore = this.totalScore+selectNum;
+		System.out.println("문제 10 : 나는 미래를 희망적이지 않다고 생각한다.");
+		System.out.println("1. 그렇지 않다   2. 가끔 그렇다   3. 자주 그렇다   4. 항상 그렇다");
+		System.out.print("선택 > ");
+		selectNum = scan.nextInt();
+		this.totalScore = this.totalScore+selectNum;
+		int score = this.totalScore;
+		this.totalScore = 0;
+		String sql = "UPDATE MENTALTEST SET DSCORE = ? WHERE ID = ?";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, score);
+			pstmt.setString(2, id);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return score;
+			
+	}
+	
+	public void STest(String id) {
+		Scanner scan = new Scanner(System.in);
+		System.out.println("스트레스 테스트 화면 입니다.");
+		System.out.println("문제를 보고 자신이 해당하는 사항을 선택해주세요.");
+		System.out.println("--------------------------------------------------");
+		System.out.println("문제 1 : 눈이 피로하다.");
+		System.out.println("1. 예   2. 아니오");
+		System.out.print("선택 > ");
+		int selectNum = scan.nextInt();
+		this.totalScore = this.totalScore + selectNum;
+		System.out.println("문제 2 : 어지럼증을 느낄 때가 있다.");
+		System.out.println("1. 예   2. 아니오");
+		System.out.print("선택 > ");
+		selectNum = scan.nextInt();
+		this.totalScore = this.totalScore + selectNum;
+		System.out.println("문제 3 : 귀에서 소리가 들릴 때가 있다.");
+		System.out.println("1. 예   2. 아니오");
+		System.out.print("선택 > ");
+		selectNum = scan.nextInt();
+		this.totalScore = this.totalScore + selectNum;
+		System.out.println("문제 4 : 때로는 입안에 염증이 생길 때가 있다.");
+		System.out.println("1. 예   2. 아니오");
+		System.out.print("선택 > ");
+		selectNum = scan.nextInt();
+		this.totalScore = this.totalScore + selectNum;
+		System.out.println("문제 5 : 좀처럼 피로가 없어지지 않는다.");
+		System.out.println("1. 예   2. 아니오");
+		System.out.print("선택 > ");
+		selectNum = scan.nextInt();
+		this.totalScore = this.totalScore + selectNum;
+		System.out.println("문제 6 : 쉽게 피로를 느낀다.");
+		System.out.println("1. 예   2. 아니오");
+		System.out.print("선택 > ");
+		selectNum = scan.nextInt();
+		this.totalScore = this.totalScore + selectNum;
+		System.out.println("문제 7 : 사소한 일로 화가 난다.");
+		System.out.println("1. 예   2. 아니오");
+		System.out.print("선택 > ");
+		selectNum = scan.nextInt();
+		this.totalScore = this.totalScore + selectNum;
+		System.out.println("문제 8 : 일할 의욕이 생기지 않는다.");
+		System.out.println("1. 예   2. 아니오");
+		System.out.print("선택 > ");
+		selectNum = scan.nextInt();
+		this.totalScore = this.totalScore + selectNum;
+		System.out.println("문제 9 : 잠을 쉽게 들지 못한다.");
+		System.out.println("1. 예   2. 아니오");
+		System.out.print("선택 > ");
+		selectNum = scan.nextInt();
+		this.totalScore = this.totalScore + selectNum;
+		System.out.println("문제 10 : 꿈을 많이 꾸거나 선잠을 잔다.");
+		System.out.println("1. 예   2. 아니오");
+		System.out.print("선택 > ");
+		selectNum = scan.nextInt();
+		this.totalScore = this.totalScore + selectNum;
+		int score = this.totalScore;
+		this.totalScore = 0;
+	}
+	
+	public void reservation(String address) {
+		String sql = "SELECT HOSPITALNAME FROM HOSPITAL WHERE ADDRESS LIKE ?";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, "%"+address+"%");
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				if(rs.getString(2)==password){
-					String sql2 = "UPDATE MENTALTEST SET DSCORE = ? WHERE PASSWORD = ?";
-					pstmt = con.prepareStatement(sql2);
-					pstmt.setString(2, password);
-					score = rs.getInt(6);
-					score = score+selectNum;
-					pstmt.setInt(1, score);
-				} else {
-					System.out.println("아이디 또는 비밀번호가 틀립니다.");
-				}
-			pstmt.executeUpdate();
+				System.out.println("거주지에서 가장 가까운 병원은 "+rs.getString("HOSPITALNAME")+"입니다.");
+			}else {
+				System.out.println("현 거주지역에 정신과치료 병원이 없습니다.");
 			}
-			System.out.println("총점 : "+Dscore+"점");
-			System.out.println("결과 : "+result+"입니다");
-			if(Dscore<=7) {
-			System.out.println("[7점이하] 정상음주입니다.");
-			} else if(Dscore<=11) {
-				System.out.println("[7~11점] “ 위험음주 수준으로 주의를 요합니다.”"); 
-				System.out.println("아직까지는 특별히 심각한 음주로 인한 문제가 발생하지는 않았지만,");
-				System.out.println("향후 음주로 인한 문제가 발생할 가능성이 있습니다.");
-				System.out.println("음주량을 줄이거나 음주횟수를 줄여 적정음주를 실행하도록 하는 것이 좋습니다.");
-			} else if(Dscore<=19) {
-				System.out.println("");
-			} else if(Dscore>=20) {
-				System.out.println("");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+		
+	public void yeonsoo() {
+		String sql = "SELECT * FROM RESERVATION WHERE HOSPITALNAME LIKE '%연수%'";
+		try {
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				System.out.println("이름 : "+rs.getString("NAME"));
+				System.out.print("예약날짜 : "+rs.getString("RDATE")+", ");
+				System.out.println("예약시간 : "+rs.getString("RTIME"));
 			}
-			
-		}catch(SQLException e) {
-				e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+		
+	public void seoul() {
+		String sql = "SELECT * FROM RESERVATION WHERE HOSPITALNAME LIKE '%서울%'";
+		try {
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				System.out.println("이름 : "+rs.getString("NAME"));
+				System.out.print("예약날짜 : "+rs.getString("RDATE")+", ");
+				System.out.println("예약시간 : "+rs.getString("RTIME"));
 			}
-}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
 	
-	
+	public void yongin() {
+		String sql = "SELECT * FROM RESERVATION WHERE HOSPITALNAME LIKE '%용인%'";
+		try {
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				System.out.println("이름 : "+rs.getString("NAME"));
+				System.out.print("예약날짜 : "+rs.getString("RDATE")+", ");
+				System.out.println("예약시간 : "+rs.getString("RTIME"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 			
+	}
 			
 	
 	
