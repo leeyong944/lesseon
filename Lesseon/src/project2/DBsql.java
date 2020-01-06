@@ -240,7 +240,7 @@ public class DBsql {
 		printSeats();
 	}
 	
-	public void pcUse() {
+	public void pcUse(String id) {
 		while(true) {
 			System.out.println("pc사용할 좌석을 입력해 주세요 ex(x,y : x번째줄 y번째)");
 			printSeats();
@@ -262,6 +262,18 @@ public class DBsql {
 					System.out.println("이미 사용중인 좌석입니다.");
 					printSeats();
 				}else {
+					try {
+						String sql = "INSERT INTO SEATS (ID) VALUES (?)";
+						pstmt = con.prepareStatement(sql);
+						pstmt.setString(1, id);
+						pstmt.executeUpdate();
+						String sql1 = "UPDATE SEATS SET SEATS = ? WHERE ID = ?";
+						pstmt = con.prepareStatement(sql1);
+						pstmt.setString(1, );
+						pstmt.setString(2, id);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 					List<String> selectSeats = getSeats().get(this.row-1);
 					selectSeats.set(this.col-1, "★");
 					System.out.println(row+"번째 줄 "+col+"번째 좌석에 사용을 시작합니다.");

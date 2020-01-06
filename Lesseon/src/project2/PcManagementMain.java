@@ -99,7 +99,7 @@ public class PcManagementMain {
 					System.out.println("1.1000원 |2.3000원 |3.5000원 |4.10000원");
 					selectNo = scan.nextInt();
 					sql.createSeats();
-					sql.pcUse();
+					sql.pcUse(id);
 				}else {
 					System.out.println("아이디 또는 비밀번호가 틀렸습니다.");
 				}
