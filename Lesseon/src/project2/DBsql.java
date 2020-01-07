@@ -127,22 +127,64 @@ public class DBsql {
 				String sql2 = "SELECT * FROM PCMEMBER";
 				pstmt = con.prepareStatement(sql2);
 				rs = pstmt.executeQuery();
-				while(rs.next()) {
-					System.out.println("");
-					System.out.print("아이디 : "+rs.getString("ID")+", ");
-					System.out.print("비밀번호 : "+rs.getString("PASSWORD")+", ");
-					System.out.print("이름 : "+rs.getString("NAME")+", ");
-					System.out.print("전화번호 : "+rs.getString("PHONE")+", ");
-					System.out.print("잔액 : "+rs.getInt("BALANCE")+", ");
-					System.out.println("");	
-			}}} else {
-				System.out.println("관리자가 아닙니다");
-			}
+				
+				boolean run = true;
+				while(run) {
+					System.out.println("┌─────────┬─────────┬──────────┐");
+					System.out.println("│1.회원목록    │2.좌석현황    │3. 좌석정보  4. 종료   │");
+					System.out.println("└─────────┴─────────┴──────────┘");
+					System.out.print("입력 : ");
+					int selectNum = scan.nextInt();
+					switch(selectNum) {
+					case 1:
+					while(rs.next()) {
+						System.out.println("");
+						System.out.print("아이디 : "+rs.getString("ID")+", ");
+						System.out.print("비밀번호 : "+rs.getString("PASSWORD")+", ");
+						System.out.print("이름 : "+rs.getString("NAME")+", ");
+						System.out.print("전화번호 : "+rs.getString("PHONE")+", ");
+						System.out.print("잔액 : "+rs.getInt("BALANCE")+", ");
+						System.out.println("");
+						}
+					break;
+					case 2:
+						sql = "SELECT * FROM SEATS";
+						pstmt = con.prepareStatement(sql);
+						rs = pstmt.executeQuery();
+						if(rs.next()) {
+							printSeats();
+							checkSeats();
+						}else {
+							printSeats();
+						}
+						break;
+					case 3:
+						String sql3 = "SELECT NAME FROM PCMEMBER P LEFT JOIN SEATS S ON (P.ID = S.ID) WHERE S.SEATS = ?";
+						pstmt = con.prepareStatement(sql3);
+						System.out.print("좌석번호를 입력해주세요 : ");
+						String seats = scan.next();
+						pstmt.setString(1, seats);
+						rs = pstmt.executeQuery();
+						if(rs.next()) {
+							System.out.println("사용자 이름 : "+rs.getString("NAME"));
+						}else {
+							System.out.println("사용중인 좌석이 아닙니다.");
+						}
+						break;
+					case 4 :
+						run = false;
+						break;
+					}
+				}}else {
+					System.out.println("관리자가 아닙니다");
+				}} 
+				
 			} catch (SQLException e) {
 			
 			e.printStackTrace();
 		}
 	}
+	
 	
 	public void chargeDB(String id, int balance) {
 		
@@ -368,6 +410,9 @@ public class DBsql {
 									selectSeats.set(this.col-1, "★");
 									System.out.println(row+"번째 줄 "+col+"번째 좌석에 사용을 시작합니다.");
 									printSeats();
+									Runnable r = new Timer1(id,seatNum);
+									Thread t = new Thread(r);
+									t.start();
 									break;
 								}
 							}
@@ -434,6 +479,9 @@ public class DBsql {
 									selectSeats.set(this.col-1, "★");
 									System.out.println(row+"번째 줄 "+col+"번째 좌석에 사용을 시작합니다.");
 									printSeats();
+									Runnable r = new Timer2(id,seatNum);
+									Thread t = new Thread(r);
+									t.start();
 									break;
 								}
 							}
@@ -500,6 +548,9 @@ public class DBsql {
 									selectSeats.set(this.col-1, "★");
 									System.out.println(row+"번째 줄 "+col+"번째 좌석에 사용을 시작합니다.");
 									printSeats();
+									Runnable r = new Timer3(id,seatNum);
+									Thread t = new Thread(r);
+									t.start();
 									break;
 								}
 							}
@@ -516,6 +567,103 @@ public class DBsql {
 		}
 	}	
 
+	public void foodDB(String id) {
+		System.out.println("1. 라면(2500원) 2. 블루베리핫치킨피자2조각(3000원) 3. 사이다(2000원)");
+		int selectNo = scan.nextInt();
+		int balance1 = 0;
+		switch(selectNo) {
+		case 1:
+			String sql = "SELECT BALANCE FROM PCMEMBER WHERE ID = ?";
+			try {
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, id);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+				if(rs.getInt("balance")>2500) {
+					balance1 = rs.getInt("balance")-2500;
+					String sql2 = "UPDATE PCMEMBER SET BALANCE = ? WHERE ID = ?";
+					pstmt = con.prepareStatement(sql2);
+					pstmt.setInt(1, balance1);
+					pstmt.setString(2, id);
+					pstmt.executeUpdate();
+					System.out.println("라면주문완료");
+				} else {
+					System.out.println("잔액이 부족합니다");
+				}
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			break;
+		case 2:
+			sql = "SELECT BALANCE FROM PCMEMBER WHERE ID = ?";
+			try {
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, id);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+				if(rs.getInt("balance")>3000) {
+					balance1 = rs.getInt("balance")-3000;
+					String sql2 = "UPDATE PCMEMBER SET BALANCE = ? WHERE ID = ?";
+					pstmt = con.prepareStatement(sql2);
+					pstmt.setInt(1, balance1);
+					pstmt.setString(2, id);
+					pstmt.executeUpdate();
+					System.out.println("블루베리핫치킨피자주문완료");
+				} else {
+					System.out.println("잔액이 부족합니다");
+				}
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			break;
+		case 3:
+			sql = "SELECT BALANCE FROM PCMEMBER WHERE ID = ?";
+			try {
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, id);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+				if(rs.getInt("balance")>2000) {
+					balance1 = rs.getInt("balance")-2000;
+					String sql2 = "UPDATE PCMEMBER SET BALANCE = ? WHERE ID = ?";
+					pstmt = con.prepareStatement(sql2);
+					pstmt.setInt(1, balance1);
+					pstmt.setString(2, id);
+					pstmt.executeUpdate();
+					System.out.println("사이다주문완료");
+				}else {
+					System.out.println("잔액이 부족합니다");
+				}
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+	break;
+	
+		}
+		}
+	
+	public boolean check2(String id) {
+		boolean check = true;
+		String sql = "SELECT ID FROM SEATS WHERE ID = ?";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				System.out.println("이미 사용중인 유저입니다");
+				check = false;
+			}else {
+				check = true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return check;
+	}
+	
 	public class Timer implements Runnable {
 		
 		String id;
@@ -558,8 +706,133 @@ public class DBsql {
 		}
 			
 		}
+	public class Timer1 implements Runnable {
+		
+			String id;
+			String seatsNo;
+			Timer1(String id, String seatsNo){
+				this.id = id;
+				this.seatsNo = seatsNo;
+			}
 
+			@Override
+			public void run() {
+				int min = 3;
+				int sec = min * 60;
+				for(int i = sec; i >= 0; i--) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				System.out.println(seatsNo+"번 좌석의 pc사용이 종료되었습니다.");
+				String sql = "DELETE FROM SEATS WHERE ID = ?";
+				try {
+					pstmt = con.prepareStatement(sql);
+					pstmt.setString(1, id);
+					pstmt.executeUpdate();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				seatsNo = seatsNo.trim();
+				seatsNo = seatsNo.replace(" ", "");
+				String seatNumbers[] = seatsNo.split(",");
+			
+				setRow(Integer.parseInt(seatNumbers[0]));
+				setCol(Integer.parseInt(seatNumbers[1]));
+			
+				List<String> selectSeats = getSeats().get(row-1);
+				selectSeats.set(col-1, "☆");
+					
+			}
+			
+			}
+	public class Timer2 implements Runnable {
+	
+		String id;
+		String seatsNo;
+		Timer2(String id, String seatsNo){
+			this.id = id;
+			this.seatsNo = seatsNo;
+		}	
+		
+		@Override
+		public void run() {
+			int min = 5;
+			int sec = min * 60;
+			for(int i = sec; i >= 0; i--) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			System.out.println(seatsNo+"번 좌석의 pc사용이 종료되었습니다.");
+			String sql = "DELETE FROM SEATS WHERE ID = ?";
+			try {
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, id);
+				pstmt.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			seatsNo = seatsNo.trim();
+			seatsNo = seatsNo.replace(" ", "");
+			String seatNumbers[] = seatsNo.split(",");
+		
+			setRow(Integer.parseInt(seatNumbers[0]));
+			setCol(Integer.parseInt(seatNumbers[1]));
+		
+			List<String> selectSeats = getSeats().get(row-1);
+			selectSeats.set(col-1, "☆");
+				
+		}
+		
 	}
+	public class Timer3 implements Runnable {
+	
+		String id;
+		String seatsNo;
+		Timer3(String id, String seatsNo){
+			this.id = id;
+			this.seatsNo = seatsNo;
+		}
+
+		@Override
+		public void run() {
+			int min = 10;
+			int sec = min * 60;
+			for(int i = sec; i >= 0; i--) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			System.out.println(seatsNo+"번 좌석의 pc사용이 종료되었습니다.");
+			String sql = "DELETE FROM SEATS WHERE ID = ?";
+			try {
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, id);
+				pstmt.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			seatsNo = seatsNo.trim();
+			seatsNo = seatsNo.replace(" ", "");
+			String seatNumbers[] = seatsNo.split(",");
+		
+			setRow(Integer.parseInt(seatNumbers[0]));
+			setCol(Integer.parseInt(seatNumbers[1]));
+		
+			List<String> selectSeats = getSeats().get(row-1);
+			selectSeats.set(col-1, "☆");
+				
+		}
+		
+	}
+}
 
 
 

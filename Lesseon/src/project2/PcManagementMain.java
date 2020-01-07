@@ -89,17 +89,36 @@ public class PcManagementMain {
 					System.out.println("아이디 또는 비밀번호가 틀렸습니다.");
 				}
 				break;
-			case 5 : 
-				System.out.println("아이디를 입력하세요 : ");
+			case 5 :
+				System.out.print("아이디를 입력하세요 : ");
 				id = scan.next();
-				System.out.println("비밀번호를 입력하세요 : ");
+				System.out.print("비밀번호를 입력하세요 : ");
+				password = scan.next();
+				check = sql.check(id, password);
+				boolean check2 = sql.check2(id);
+				if(check2) {
+					if(check) {
+						sql.pcUse(id);
+					}else {
+						System.out.println("아이디 또는 비밀번호가 틀렸습니다.");
+					}
+				}
+				break;
+			case 6 :
+				System.out.print("아이디를 입력하세요 : ");
+				id = scan.next();
+				System.out.print("비밀번호를 입력하세요 : ");
 				password = scan.next();
 				check = sql.check(id, password);
 				if(check) {
-					sql.pcUse(id);
+					sql.foodDB(id);
 				}else {
 					System.out.println("아이디 또는 비밀번호가 틀렸습니다.");
 				}
+				break;
+			case 7:
+				System.out.println("이용해주셔서 감사합니다.");
+				run = false;
 				break;
 			case 99 :
 				System.out.println("아이디를 입력해 주세요 : ");
