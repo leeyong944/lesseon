@@ -199,7 +199,7 @@ public class DBsql {
 	}
 	
 	public boolean checkRow(int num) {
-		if(num <= 0 || num >= 6) {
+		if(num < 0 || num > 6) {
 			return true;
 		}else {
 			return false;
@@ -207,7 +207,7 @@ public class DBsql {
 	}
 	
 	public boolean checkCol(int num) {
-		if(num <= 0 || num >= 5) {
+		if(num < 0 || num > 5) {
 			return true;
 		}else {
 			return false;
@@ -240,49 +240,327 @@ public class DBsql {
 		printSeats();
 	}
 	
+	
 	public void pcUse(String id) {
-		while(true) {
-			System.out.println("pc사용할 좌석을 입력해 주세요 ex(x,y : x번째줄 y번째)");
-			printSeats();
-			
-			String seatNum = inputScanner();
-			System.out.println("");
-			
-			seatNum = seatNum.trim();
-			seatNum = seatNum.replace(" ", "");
-			String seatNumbers[] = seatNum.split(",");
-			
-			this.setRow(Integer.parseInt(seatNumbers[0]));
-			this.setCol(Integer.parseInt(seatNumbers[1]));
-			
-			if(checkRow(this.row)||checkCol(this.col)) {
-				System.out.println("존재하지 않는 좌석 입니다.");
-			}else {
-				if(checkSeats()) {
-					System.out.println("이미 사용중인 좌석입니다.");
-					printSeats();
-				}else {
-					try {
-						String sql = "INSERT INTO SEATS (ID) VALUES (?)";
-						pstmt = con.prepareStatement(sql);
-						pstmt.setString(1, id);
-						pstmt.executeUpdate();
-						String sql1 = "UPDATE SEATS SET SEATS = ? WHERE ID = ?";
+		int balance1 = 0;
+		System.out.println("사용할 금액을 선택해 주세요.");
+		System.out.println("1.1000원 |2.3000원 |3.5000원 |4.10000원");
+		int selectNo = scan.nextInt();
+		switch(selectNo) {
+		case 1 :
+			String sql = "SELECT BALANCE FROM PCMEMBER WHERE ID = ?";
+			try {
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, id);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+					if(rs.getInt("BALANCE")>=1000) {
+						balance1 = rs.getInt("BALANCE") - 1000;
+						String sql1 = "UPDATE PCMEMBER SET BALANCE = ? WHERE ID = ?";
 						pstmt = con.prepareStatement(sql1);
-						pstmt.setString(1, );
+						pstmt.setInt(1, balance1);
 						pstmt.setString(2, id);
-					} catch (SQLException e) {
-						e.printStackTrace();
+						pstmt.executeUpdate();
+						while(true) {
+							System.out.println("pc사용할 좌석을 입력해 주세요 ex(x,y : x번째줄 y번째)");
+							printSeats();
+							
+							String seatNum = inputScanner();
+							System.out.println("");
+							
+							seatNum = seatNum.trim();
+							seatNum = seatNum.replace(" ", "");
+							String seatNumbers[] = seatNum.split(",");
+							
+							this.setRow(Integer.parseInt(seatNumbers[0]));
+							this.setCol(Integer.parseInt(seatNumbers[1]));
+							String seats = this.row+","+this.col;
+							
+							if(checkRow(this.row)||checkCol(this.col)) {
+								System.out.println("존재하지 않는 좌석 입니다.");
+							}else {
+								if(checkSeats()) {
+									System.out.println("이미 사용중인 좌석입니다.");
+									printSeats();
+								}else {
+									try {
+										sql = "INSERT INTO SEATS (ID) VALUES (?)";
+										pstmt = con.prepareStatement(sql);
+										pstmt.setString(1, id);
+										pstmt.executeUpdate();
+										sql1 = "UPDATE SEATS SET SEATS = ? WHERE ID = ?";
+										pstmt = con.prepareStatement(sql1);
+										pstmt.setString(1, seatNum);
+										pstmt.setString(2, id);
+										pstmt.executeUpdate();
+									} catch (SQLException e) {
+										e.printStackTrace();
+									}
+									List<String> selectSeats = getSeats().get(this.row-1);
+									selectSeats.set(this.col-1, "★");
+									System.out.println(row+"번째 줄 "+col+"번째 좌석에 사용을 시작합니다.");
+									printSeats();
+									Runnable r = new Timer(id,seatNum);
+									Thread t = new Thread(r);
+									t.start();
+									break;
+								}
+							}
+						}
+					}else {
+						System.out.println("잔액이 부족합니다.");
 					}
-					List<String> selectSeats = getSeats().get(this.row-1);
-					selectSeats.set(this.col-1, "★");
-					System.out.println(row+"번째 줄 "+col+"번째 좌석에 사용을 시작합니다.");
-					printSeats();
-					break;
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			break;
+		case 2 :
+			sql = "SELECT BALANCE FROM PCMEMBER WHERE ID = ?";
+			try {
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, id);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+					if(rs.getInt("BALANCE")>=3000) {
+						balance1 = rs.getInt("BALANCE") - 3000;
+						String sql1 = "UPDATE PCMEMBER SET BALANCE = ? WHERE ID = ?";
+						pstmt = con.prepareStatement(sql1);
+						pstmt.setInt(1, balance1);
+						pstmt.setString(2, id);
+						pstmt.executeUpdate();
+						while(true) {
+							System.out.println("pc사용할 좌석을 입력해 주세요 ex(x,y : x번째줄 y번째)");
+							printSeats();
+							
+							String seatNum = inputScanner();
+							System.out.println("");
+							
+							seatNum = seatNum.trim();
+							seatNum = seatNum.replace(" ", "");
+							String seatNumbers[] = seatNum.split(",");
+							
+							this.setRow(Integer.parseInt(seatNumbers[0]));
+							this.setCol(Integer.parseInt(seatNumbers[1]));
+							String seats = this.row+","+this.col;
+							
+							if(checkRow(this.row)||checkCol(this.col)) {
+								System.out.println("존재하지 않는 좌석 입니다.");
+							}else {
+								if(checkSeats()) {
+									System.out.println("이미 사용중인 좌석입니다.");
+									printSeats();
+								}else {
+									try {
+										sql = "INSERT INTO SEATS (ID) VALUES (?)";
+										pstmt = con.prepareStatement(sql);
+										pstmt.setString(1, id);
+										pstmt.executeUpdate();
+										sql1 = "UPDATE SEATS SET SEATS = ? WHERE ID = ?";
+										pstmt = con.prepareStatement(sql1);
+										pstmt.setString(1, seatNum);
+										pstmt.setString(2, id);
+										pstmt.executeUpdate();
+									} catch (SQLException e) {
+										e.printStackTrace();
+									}
+									List<String> selectSeats = getSeats().get(this.row-1);
+									selectSeats.set(this.col-1, "★");
+									System.out.println(row+"번째 줄 "+col+"번째 좌석에 사용을 시작합니다.");
+									printSeats();
+									break;
+								}
+							}
+							
+						}
+					}else {
+						System.out.println("잔액이 부족합니다.");
+					}
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			break;
+		case 3 :
+			sql = "SELECT BALANCE FROM PCMEMBER WHERE ID = ?";
+			try {
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, id);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+					if(rs.getInt("BALANCE")>=5000) {
+						balance1 = rs.getInt("BALANCE") - 5000;
+						String sql1 = "UPDATE PCMEMBER SET BALANCE = ? WHERE ID = ?";
+						pstmt = con.prepareStatement(sql1);
+						pstmt.setInt(1, balance1);
+						pstmt.setString(2, id);
+						pstmt.executeUpdate();
+						while(true) {
+							System.out.println("pc사용할 좌석을 입력해 주세요 ex(x,y : x번째줄 y번째)");
+							printSeats();
+							
+							String seatNum = inputScanner();
+							System.out.println("");
+							
+							seatNum = seatNum.trim();
+							seatNum = seatNum.replace(" ", "");
+							String seatNumbers[] = seatNum.split(",");
+							
+							this.setRow(Integer.parseInt(seatNumbers[0]));
+							this.setCol(Integer.parseInt(seatNumbers[1]));
+							String seats = this.row+","+this.col;
+							
+							if(checkRow(this.row)||checkCol(this.col)) {
+								System.out.println("존재하지 않는 좌석 입니다.");
+							}else {
+								if(checkSeats()) {
+									System.out.println("이미 사용중인 좌석입니다.");
+									printSeats();
+								}else {
+									try {
+										sql = "INSERT INTO SEATS (ID) VALUES (?)";
+										pstmt = con.prepareStatement(sql);
+										pstmt.setString(1, id);
+										pstmt.executeUpdate();
+										sql1 = "UPDATE SEATS SET SEATS = ? WHERE ID = ?";
+										pstmt = con.prepareStatement(sql1);
+										pstmt.setString(1, seatNum);
+										pstmt.setString(2, id);
+										pstmt.executeUpdate();
+									} catch (SQLException e) {
+										e.printStackTrace();
+									}
+									List<String> selectSeats = getSeats().get(this.row-1);
+									selectSeats.set(this.col-1, "★");
+									System.out.println(row+"번째 줄 "+col+"번째 좌석에 사용을 시작합니다.");
+									printSeats();
+									break;
+								}
+							}
+							
+						}
+					}else {
+						System.out.println("잔액이 부족합니다.");
+					}
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			break;
+		case 4 :
+			sql = "SELECT BALANCE FROM PCMEMBER WHERE ID = ?";
+			try {
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, id);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+					if(rs.getInt("BALANCE")>=10000) {
+						balance1 = rs.getInt("BALANCE") - 10000;
+						String sql1 = "UPDATE PCMEMBER SET BALANCE = ? WHERE ID = ?";
+						pstmt = con.prepareStatement(sql1);
+						pstmt.setInt(1, balance1);
+						pstmt.setString(2, id);
+						pstmt.executeUpdate();
+						while(true) {
+							System.out.println("pc사용할 좌석을 입력해 주세요 ex(x,y : x번째줄 y번째)");
+							printSeats();
+							
+							String seatNum = inputScanner();
+							System.out.println("");
+							
+							seatNum = seatNum.trim();
+							seatNum = seatNum.replace(" ", "");
+							String seatNumbers[] = seatNum.split(",");
+							
+							this.setRow(Integer.parseInt(seatNumbers[0]));
+							this.setCol(Integer.parseInt(seatNumbers[1]));
+							String seats = this.row+","+this.col;
+							
+							if(checkRow(this.row)||checkCol(this.col)) {
+								System.out.println("존재하지 않는 좌석 입니다.");
+							}else {
+								if(checkSeats()) {
+									System.out.println("이미 사용중인 좌석입니다.");
+									printSeats();
+								}else {
+									try {
+										sql = "INSERT INTO SEATS (ID) VALUES (?)";
+										pstmt = con.prepareStatement(sql);
+										pstmt.setString(1, id);
+										pstmt.executeUpdate();
+										sql1 = "UPDATE SEATS SET SEATS = ? WHERE ID = ?";
+										pstmt = con.prepareStatement(sql1);
+										pstmt.setString(1, seatNum);
+										pstmt.setString(2, id);
+										pstmt.executeUpdate();
+									} catch (SQLException e) {
+										e.printStackTrace();
+									}
+									List<String> selectSeats = getSeats().get(this.row-1);
+									selectSeats.set(this.col-1, "★");
+									System.out.println(row+"번째 줄 "+col+"번째 좌석에 사용을 시작합니다.");
+									printSeats();
+									break;
+								}
+							}
+							
+						}
+					}else {
+						System.out.println("잔액이 부족합니다.");
+					}
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			break;
+		}
+	}	
+
+	public class Timer implements Runnable {
+		
+		String id;
+		String seatsNo;
+		Timer(String id, String seatsNo){
+			this.id = id;
+			this.seatsNo = seatsNo;
+		}
+
+		@Override
+		public void run() {
+			int min = 1;
+			int sec = min * 60;
+			for(int i = sec; i >= 0; i--) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
+			System.out.println(seatsNo+"번 좌석의 pc사용이 종료되었습니다.");
+			String sql = "DELETE FROM SEATS WHERE ID = ?";
+			try {
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, id);
+				pstmt.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			seatsNo = seatsNo.trim();
+			seatsNo = seatsNo.replace(" ", "");
+			String seatNumbers[] = seatsNo.split(",");
+			
+			setRow(Integer.parseInt(seatNumbers[0]));
+			setCol(Integer.parseInt(seatNumbers[1]));
+			
+			List<String> selectSeats = getSeats().get(row-1);
+			selectSeats.set(col-1, "☆");
+					
+		}
 			
 		}
+
 	}
 
-}
+
+
+

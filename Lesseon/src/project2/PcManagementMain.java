@@ -19,6 +19,7 @@ public class PcManagementMain {
 			switch(selectNo) {
 			case 0 :
 				sql.dbConnection();
+				sql.createSeats();
 				break;
 			case 1 :
 				pm = new PcManagement();
@@ -95,10 +96,6 @@ public class PcManagementMain {
 				password = scan.next();
 				check = sql.check(id, password);
 				if(check) {
-					System.out.println("사용할 금액을 선택해 주세요.");
-					System.out.println("1.1000원 |2.3000원 |3.5000원 |4.10000원");
-					selectNo = scan.nextInt();
-					sql.createSeats();
 					sql.pcUse(id);
 				}else {
 					System.out.println("아이디 또는 비밀번호가 틀렸습니다.");
