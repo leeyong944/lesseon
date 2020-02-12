@@ -1,0 +1,28 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script>
+	function select(){
+		location.href = "selectDB";
+	}
+</script>
+</head>
+<body>
+<h2>Input.08.jsp 파일</h2>
+data1, data2라는 파라미터에 각각 jsp, servlet 이라는 정보를 담아서
+inputserver라는 주소로 전송하고 콘솔에 전송받은 값을 출력하세요.
+<form action="inputServer" method="get">
+<input type="text" name="data1">
+<input type="text" name="data2">
+<input type="submit" value="서버로전송">
+</form>
+
+<h2>DB 내용 조회하기</h2>
+<a href="selectDB">DB 조회 링크</a>
+<button onclick="select()">DB 조회</button>
+</body>
+</html>
